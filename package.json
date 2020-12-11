@@ -4,7 +4,8 @@
   "description": "An desktop application to shrink images",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
   },
   "author": "Felix Omuok",
   "license": "ISC",
