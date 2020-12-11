@@ -1,0 +1,14 @@
+{
+  "name": "image-shrink-app",
+  "version": "1.0.0",
+  "description": "An desktop application to shrink images",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Felix Omuok",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.0.4"
+  }
+}
