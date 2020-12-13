@@ -6,9 +6,9 @@ process.env.NODE_ENV = 'development';
 const isDev = process.env.NODE_ENV !== 'production' ? true : false;
 const isMac = process.platform === 'darwin' ? true : false;
 
-
-
 let mainWindow;
+
+let aboutWindow;
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: 'IMageShrink',
@@ -23,23 +23,52 @@ function createMainWindow() {
 mainWindow.loadFile('./app/index.html')
 }
 
+function createAboutWindow() {
+    aboutWindow = new BrowserWindow({
+      title: 'IMageShrink',
+      width: 300,
+      height: 300,
+      icon: `${__dirname}/assets/icons/icons/Icon_256x256.png`,
+      resizable: false,
+      backgroundColor: 'white'
+    })
+  
+  //   mainWindow.loadURL(`file://${__dirname}/app/index.html`)
+  aboutWindow.loadFile('./app/about.html')
+  }
+
 app.on('ready', () => {
     createMainWindow();
 
       const mainMenu = Menu.buildFromTemplate(menu)
     Menu.setApplicationMenu(mainMenu)
 
-    globalShortcut.register('CmdOrCtrl+R', () => mainWindow.reload())
-    globalShortcut.register(isMac ? 'Command+alt+I' : 'Ctrl+Shift+I', () => mainWindow.toggleDevTools())
+
     mainWindow.on('closed', ()=>mainWindow = null)
 });
 
 const menu = [
-    ...(isMac ? [{role: 'appMenu'}] : []),
+    ...(isMac ? [{ label: app.name, 
+    submenu: [
+        {
+            label: 'About',
+            click: createMainWindow
+        }
+    ]}] : []),
   
         {
             role: 'fileMenu'
         },
+    ...(!isMac ? [
+        {
+            label: 'Help',
+            submenu: [{
+                label: 'About',
+            click: createAboutWindow
+            }]
+
+        }
+    ]: []),
     ...(isDev ? [
         {
             label: 'Developer',
