@@ -16,7 +16,7 @@
     <div class="container center-align">
         <h2><i class="fas fa-images">ImageShrink</i></h2>
         <p>Choose an Image To Resize</p>
-        <form class="image-form">
+        <form id="image-form">
             <div class="file-field input-field">
                 <div class="btn">
                     <span>Browse</span>
@@ -34,14 +34,36 @@
                 <input type="range" min="0" max="100" name="" id="slider">
             </p>
             <input type="submit" class="btn black" value="Resize">
-        </form>
+        </form> 
         <div class="card output">
             <div class="card-content">
                 Output Path: <span id="output-path"></span>
-            </div>
+            </div> 
         </div>
     </div>
     <script src="js/materialize.min.js"></script>
+    <script>
+        const path = require('path');
+        const os = require('os');
+        const { ipcRenderer } = require('electron')
+
+        const form = document.getElementById('image-form');
+        const slider = document.getElementById('slider');
+        const img = document.getElementById('img');
+
+        document.getElementById('output-path').innerText = path.join(os.homedir(),
+        'imageshrink');
+
+        //OnSubmit
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const imgPath = img.files[0].path;
+            const quality = slider.value;
+
+            ipcRenderer.send('image:minimize', {imgPath,quality})
+        })
+    </script>
 </body>
 
 </html> 

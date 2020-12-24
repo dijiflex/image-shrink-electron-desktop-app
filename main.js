@@ -1,7 +1,7 @@
 
-const { app, BrowserWindow, Menu, globalShortcut} = require('electron');
+const { app, BrowserWindow, Menu, ipcMain} = require('electron');
 
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'development';  
 
 const isDev = process.env.NODE_ENV !== 'production' ? true : false;
 const isMac = process.platform === 'darwin' ? true : false;
@@ -12,14 +12,19 @@ let aboutWindow;
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: 'IMageShrink',
-    width: 500,
+    width:  isDev ? 800 : 500,
     height: 600,
     icon: `${__dirname}/assets/icons/icons/Icon_256x256.png`,
     resizable: isDev,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    webPreferences: {
+        nodeIntegration: true
+    }
   })
 
-//   mainWindow.loadURL(`file://${__dirname}/app/index.html`)
+ if(isDev) {
+     mainWindow.webContents.openDevTools() 
+ }
 mainWindow.loadFile('./app/index.html')
 }
 
@@ -81,6 +86,10 @@ const menu = [
         }
     ]: [])
 ];
+
+ipcMain.on('image:minimize', (e, options) => {
+console.log(options);
+})
 
 app.on('window-all-closed', () => {
     if(!isMac){
